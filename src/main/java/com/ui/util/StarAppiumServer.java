@@ -5,7 +5,7 @@ import io.appium.java_client.service.local.AppiumServiceBuilder;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
-import java.net.ServerSocket;
+import java.net.*;
 
 
 /**
@@ -28,28 +28,27 @@ public class StarAppiumServer {
         this.host = host;
     }
 
-    public Boolean isRunPort() {
+    public Boolean isRunPort() throws UnknownHostException {
         boolean isPortRunning = false;
-
-        ServerSocket serverSocket;
-
+        InetAddress address = InetAddress.getByName(host);
+        ServerSocket serverSocket = null;
         try {
-            serverSocket = new ServerSocket(this.port);
-
-            serverSocket.close();
-
+            serverSocket = new ServerSocket();
+            SocketAddress endpoint = new InetSocketAddress(address, this.port);
+            serverSocket.bind(endpoint);
         } catch (IOException e) {
-//If control comes here, then it means that the port is in use
-
+            log.error(this.port + "端口已经被占用", e);
             isPortRunning = true;
-
         } finally {
-            serverSocket = null;
+            if (serverSocket != null) {
+                try {
+                    serverSocket.close();
+                } catch (IOException e) {
 
+                }
+            }
         }
-
         return isPortRunning;
-
     }
 
 
@@ -57,11 +56,8 @@ public class StarAppiumServer {
 
         Boolean portIfRunning = isRunPort();
         if (portIfRunning) {
-            log.error("该端口" + this.port + "被占用了，请换一个端口号！！");
             throw new RuntimeException("该端口" + this.port + "被占用了，请换一个端口号！！");
-
         } else {
-
             appiumServiceBuilder = new AppiumServiceBuilder()
                     .withIPAddress(this.host)
                     .usingPort(this.port);
@@ -79,6 +75,6 @@ public class StarAppiumServer {
             System.exit(-1);
         }
 
-        new Thread().sleep(30);
+        Thread.sleep(3000);
     }
 }
