@@ -1,15 +1,21 @@
 package com.ui.util;
 
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
+import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.android.AndroidDriver;
+import org.openqa.selenium.By;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.HttpCommandExecutor;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
 /**
  * <pre>
- *      业务描述：
+ *      业务描述：启动一个appdriver
  * </pre>
  *
- * @author mac
+ * @author zhangfangfang
  * @since 2021/5/9 16:45
  */
 public class InitDriver {
@@ -21,8 +27,19 @@ public class InitDriver {
     private Boolean resetKeyboard;
     private Boolean noReset;
     private String automationName;
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+
+        this.url = url+"/wd/hub";
+        System.out.println(this.url);
+    }
+
     private Boolean ensureWebviewsHavePages;
-    private HttpCommandExecutor appiumServerUrl;
+    private String url;
 
     public Boolean getNoReset() {
         return noReset;
@@ -97,17 +114,13 @@ public class InitDriver {
     }
 
 
-    public HttpCommandExecutor getAppiumServerUrl() {
-        return appiumServerUrl;
-    }
 
-    public void setAppiumServerUrl(HttpCommandExecutor appiumServerUrl) {
-        //appiumServerUrl=new URL();
-        this.appiumServerUrl = appiumServerUrl;
-    }
+
+
 
     //获取driver
-    public AndroidDriver getDriver() {
+    public Object getDriver() throws MalformedURLException {
+        //读书配置文件进行赋值
         DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
         desiredCapabilities.setCapability("platformName", getPlatformName());
         desiredCapabilities.setCapability("appPackage", getAppPackage());
@@ -116,9 +129,10 @@ public class InitDriver {
         desiredCapabilities.setCapability("appActivity", getAppActivity());
         desiredCapabilities.setCapability("resetKeyboard", getResetKeyboard());
         desiredCapabilities.setCapability("noReset", getNoReset());
-        desiredCapabilities.setCapability("automationName", getAutomationName());
+        //desiredCapabilities.setCapability("automationName", getAutomationName());
         desiredCapabilities.setCapability("ensureWebviewsHavePages", getEnsureWebviewsHavePages());
-        AndroidDriver driver = new AndroidDriver(appiumServerUrl, desiredCapabilities);
+        desiredCapabilities.setCapability("automationName","Uiautomator2");
+        AppiumDriver driver = new AppiumDriver(new URL(getUrl()), desiredCapabilities);
         return driver;
     }
 //        DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
@@ -132,5 +146,20 @@ public class InitDriver {
 //        desiredCapabilities.setCapability("automationName", "UiAutomator2");
 //        desiredCapabilities.setCapability("ensureWebviewsHavePages", true);
 
+    public static void main(String[] args) throws MalformedURLException {
+        AppiumDriver driver = null;
+        InitDriver app = new InitDriver();
+        app.setPlatformName("Android");
+        app.setDeviceName("35c5817f");
+        app.setPlatformVersion("10");
+        app.setAppPackage("com.wuba");
+        app.setAppActivity("com.wuba/com.wuba.home.activity.HomeActivit");
+        app.setResetKeyboard(true);
+        app.setNoReset(true);
+        app.setEnsureWebviewsHavePages(true);
+        app.setUrl("http://127.0.0.1:4723");
+        driver = (AppiumDriver) app.getDriver();
 
+
+    }
 }

@@ -10,10 +10,10 @@ import java.net.*;
 
 /**
  * <pre>
- *      业务描述：
+ *      业务描述：用于启动appiumserver ，需要指定host port
  * </pre>
  *
- * @author mac
+ * @author zhangfangfang
  * @since 2021/5/9 17:04
  */
 public class StarAppiumServer {
@@ -69,7 +69,7 @@ public class StarAppiumServer {
 
     public static void main(String[] args) throws InterruptedException {
         try {
-            new StarAppiumServer(8080, "127.0.0.1").starAppiumServer();
+            new StarAppiumServer(8081, "127.0.0.1").starAppiumServer();
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(-1);
