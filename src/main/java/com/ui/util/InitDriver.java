@@ -1,14 +1,11 @@
 package com.ui.util;
 
-import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import io.appium.java_client.AppiumDriver;
-import io.appium.java_client.android.AndroidDriver;
-import org.openqa.selenium.By;
 import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.remote.HttpCommandExecutor;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.concurrent.TimeUnit;
 
 /**
  * <pre>
@@ -34,7 +31,7 @@ public class InitDriver {
 
     public void setUrl(String url) {
 
-        this.url = url+"/wd/hub";
+        this.url = url + "/wd/hub";
         System.out.println(this.url);
     }
 
@@ -114,10 +111,6 @@ public class InitDriver {
     }
 
 
-
-
-
-
     //获取driver
     public Object getDriver() throws MalformedURLException {
         //读书配置文件进行赋值
@@ -131,7 +124,7 @@ public class InitDriver {
         desiredCapabilities.setCapability("noReset", getNoReset());
         //desiredCapabilities.setCapability("automationName", getAutomationName());
         desiredCapabilities.setCapability("ensureWebviewsHavePages", getEnsureWebviewsHavePages());
-        desiredCapabilities.setCapability("automationName","Uiautomator2");
+        desiredCapabilities.setCapability("automationName", "Uiautomator2");
         AppiumDriver driver = new AppiumDriver(new URL(getUrl()), desiredCapabilities);
         return driver;
     }
@@ -152,14 +145,19 @@ public class InitDriver {
         app.setPlatformName("Android");
         app.setDeviceName("35c5817f");
         app.setPlatformVersion("10");
-        app.setAppPackage("com.wuba");
-        app.setAppActivity("com.wuba/com.wuba.home.activity.HomeActivit");
+        app.setAppPackage("com.android.calendar");
+        app.setAppActivity("com.android.calendar.homepage.AllInOneActivity");
         app.setResetKeyboard(true);
         app.setNoReset(true);
         app.setEnsureWebviewsHavePages(true);
         app.setUrl("http://127.0.0.1:4723");
         driver = (AppiumDriver) app.getDriver();
 
+        try {
+            TimeUnit.SECONDS.sleep(180);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
     }
 }
