@@ -145,8 +145,8 @@ public class InitDriver {
         app.setPlatformName("Android");
         app.setDeviceName("35c5817f");
         app.setPlatformVersion("10");
-        app.setAppPackage("com.android.calendar");
-        app.setAppActivity("com.android.calendar.homepage.AllInOneActivity");
+        app.setAppPackage("com.wuba");
+        app.setAppActivity("com.wuba.activity.launch.LaunchActivity");
         app.setResetKeyboard(true);
         app.setNoReset(true);
         app.setEnsureWebviewsHavePages(true);
