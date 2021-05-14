@@ -21,19 +21,23 @@ public class OperHost {
     private String dir;
     public static Logger log = Logger.getLogger(OperHost.class);
 
-    public OperHost(String dir) {
+    public OperHost(String dir) throws IOException {
+        if(dir.equals("")){
+            throw new IOException("未指定本地的host路径");
+        }
         this.dir = dir;
     }
 
-    public void reWrite(HashMap<String,String> hosts) throws IOException {
+    public void reWrite(HashMap<String, String> hosts) throws Exception {
          AtomicReference<String> writeHosts = new AtomicReference<>("");
+         PrintStream printStream = new PrintStream(this.dir);
          if(hosts instanceof HashMap){
              Set<String> keys = hosts.keySet();
              keys.forEach((e)-> {
                  writeHosts.set(writeHosts + String.format("%s\t%s%n", e, hosts.get(e)));
              });
 
-             PrintStream printStream = new PrintStream(this.dir);
+
              printStream.print(writeHosts);
              log.info("覆盖写入本地host");
 
@@ -42,18 +46,25 @@ public class OperHost {
          }else{
              throw new IOException("实参传入有误，请传入map类型的数据");
          }
+
+
         //读取文件
         //覆盖写入
         //log
 
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
         HashMap<String,String> hostMap = new HashMap<>();
-        hostMap.put("server","58");
-        hostMap.put("fe","58");
-        OperHost p = new OperHost("/Users/zff/zff/zff.txt");
-        p.reWrite(hostMap);
+        ReadProperties readProperties = new ReadProperties();
+        readProperties.getProperties("base.properties","jiazheng.58.com");
+        readProperties.getProperties("base.properties","jiafu.58.com");
+        readProperties.getProperties("base.properties","j1.58cdn.com.cn");
+        readProperties.getProperties("base.properties","c.58cdn.com.cn");
+        HashMap<String,String> hosts = readProperties.propertyMap;
+        System.out.println(hosts);
+        OperHost p = new OperHost("");
+        p.reWrite(hosts);
 
     }
 }

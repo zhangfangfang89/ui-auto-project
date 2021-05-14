@@ -14,30 +14,16 @@ import java.util.Properties;
  * @since 2021/5/9 17:04
  */
 public class ReadProperties {
-   private  Properties properties = new Properties();
+    private  Properties properties = new Properties();
+    public HashMap<String, String> propertyMap = new HashMap<String, String>();
 
-
-    public Object getProperties(String name ,String property) throws IOException {
-        HashMap<String, String> desiredCapabilitiesMap = new HashMap<String, String>();
+    public void getProperties(String name ,String property) throws IOException {
         properties.load(this.getClass().getClassLoader().getResourceAsStream(name));
         String propertyString = this.properties.getProperty(property);
-        if("base.properties"==name) {
-
-
-            String[] everyCapabily = propertyString.split(",");
-
-            for (int i = 0; i < everyCapabily.length; i++) {
-
-                desiredCapabilitiesMap.put(everyCapabily[i], everyCapabily[i]);
-            }
-        }else {
-             return propertyString;
+        if(!propertyString.equals("")) {
+            propertyMap.put(property, propertyString);
         }
-
-        return desiredCapabilitiesMap;
     }
 
-    public static void main(String[] args) throws IOException {
-        new ReadProperties().getProperties("base.properties","one.desiredCapabilities");
-    }
+
 }
