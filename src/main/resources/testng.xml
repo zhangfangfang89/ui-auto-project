@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
-<suite name="Suite1">
-    <parameter name="port" value="4732"></parameter>
+<suite name="Suite1" configfailurepolicy="continue">
+    <parameter name="port" value= "4722"></parameter>
     <parameter name="host" value="127.0.0.1"></parameter>
+    <parameter name="platformName" value="Android"></parameter>
+    <parameter name="deviceName" value="35c5817f"></parameter>
+    <parameter name="platformVersion" value="10"></parameter>
+    <parameter name="appPackage" value="com.wuba"></parameter>
+    <parameter name="appActivity" value="com.wuba.activity.launch.LaunchActivity"></parameter>
+    <parameter name="uuid" value=""></parameter>
+    <parameter name="app" value=""></parameter>
     <test name="NewTest">
+
         <classes>
             <class name="com.ui.cases.Test01" />
         </classes>

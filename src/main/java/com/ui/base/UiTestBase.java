@@ -1,11 +1,11 @@
 package com.ui.base;
 
-import com.ui.util.InitDriver;
-import com.ui.util.StarAppiumServer;
-import io.appium.java_client.AppiumDriver;
+import com.ui.util.DriverHolder;
+import com.ui.util.StartAppiumServer;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import org.apache.log4j.Logger;
 import org.testng.annotations.*;
+
 
 
 /**
@@ -20,17 +20,18 @@ import org.testng.annotations.*;
 
 
 public class UiTestBase {
-    public AppiumDriver driver;
+    public DriverHolder driverHolder;
     public Boolean appiumServerIsRunning;
     public AppiumDriverLocalService appiumDriverLocalService;
     public static Logger log = Logger.getLogger(UiTestBase.class);
+
 
     @Parameters({"host","port"})
     @BeforeSuite
     public void setUpSuite(String host,int port) throws Exception {
         log.info("进行启动appiumserver");
-        StarAppiumServer starAppiumServer = new StarAppiumServer(port,host);
-        appiumDriverLocalService = starAppiumServer.starServer();
+        StartAppiumServer startAppiumServer = new StartAppiumServer(port,host);
+        appiumDriverLocalService = startAppiumServer.startServer();
         appiumServerIsRunning=true;
     }
     @AfterSuite
@@ -40,23 +41,24 @@ public class UiTestBase {
         appiumServerIsRunning=false;
     }
 
-//    @BeforeMethod
+    @BeforeMethod
+    @Parameters({"host","port","platformName","deviceName","platformVersion","appPackage","appActivity","uuid","app"})
+    public void setUp(String host, int port,String platformName,String deviceName,String platformVersion,String appPackage,String appActivity,String uuid,String app) throws Exception {
+        if (appiumServerIsRunning){
+            //这边会去掉从哪个页面开始
+            log.info("测试开始了");
+            driverHolder = new DriverHolder(host,port,platformName,deviceName,platformVersion,appPackage,appActivity,uuid,app);
 
-//    public void setUp() throws Exception {
-//        if (appiumServerIsRunning){
-//
-//
-//            //driver= InitDriver();
-//            //这边会去掉从哪个页面开始
-//        }else {
-//            throw new Exception("appiumServer 还没启动");
-//        }
-//        //判断appiumserver是否开启，没开启就开启，有开启就不做什么动作
-//        // 读取配置文件来设置driver
-//        //判断是唤起哪个app后走不同的分支 进行登录后进入家服的入口页面
-//    }
-//   @AfterMethod
-//   public void tearDown() {
-//       //关闭driver
-//  }
+
+        }else {
+            throw new Exception("appiumServer 还没启动");
+        }
+
+    }
+   @AfterMethod
+   public void tearDown() {
+       log.info("测试结束了");
+       this.driverHolder.getDriver().close();
+
+  }
 }

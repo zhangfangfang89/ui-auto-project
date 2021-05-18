@@ -16,14 +16,14 @@ import java.net.*;
  * @author zhangfangfang
  * @since 2021/5/9 17:04
  */
-public class StarAppiumServer {
+public class StartAppiumServer {
     private AppiumDriverLocalService appiumDriverLocalService;
     private  AppiumServiceBuilder appiumServiceBuilder;
     private  int port;
     private  String host;
-    public static Logger log = Logger.getLogger(StarAppiumServer.class);
+    public static Logger log = Logger.getLogger(StartAppiumServer.class);
 
-    public StarAppiumServer(int port, String host) {
+    public StartAppiumServer(int port, String host) {
         this.port = port;
         this.host = host;
     }
@@ -55,7 +55,7 @@ public class StarAppiumServer {
 
 
     //开启指定的appium的server，用于每次运行前执行
-    public AppiumDriverLocalService starServer() throws Exception {
+    public AppiumDriverLocalService startServer() throws Exception {
         Boolean portIfRunning = isRunPort();
         if (portIfRunning) {
             throw new RuntimeException("该端口" + this.port + "被占用了，请换一个端口号！！");
@@ -73,7 +73,7 @@ public class StarAppiumServer {
 
     public static void main(String[] args) throws InterruptedException {
         try {
-            new StarAppiumServer(8081, "127.0.0.1").starServer();
+            new StartAppiumServer(8081, "127.0.0.1").startServer();
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(-1);

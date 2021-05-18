@@ -1,13 +1,20 @@
 package com.ui.run;
 
-import com.ui.util.StarAppiumServer;
-import io.appium.java_client.service.local.AppiumDriverLocalService;
+import org.testng.TestNG;
+
+import java.util.ArrayList;
 
 public class RunTestsThead extends Thread {
+    public ArrayList<String> suites = new ArrayList<>();
 
+    public void setSuites(String testXmlDir) {
+        this.suites.add(testXmlDir);
+    }
 
-
-
-
-
+    @Override
+    public void run() {
+        TestNG testNG = new TestNG();
+        testNG.setTestSuites(this.suites);
+        testNG.run();
+    }
 }
